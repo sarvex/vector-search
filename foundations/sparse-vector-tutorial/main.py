@@ -19,11 +19,7 @@ article_html = bs.BeautifulSoup(raw_html, 'lxml')
 
 article_paragraphs = article_html.find_all('p')
 
-article_text = ''
-
-for para in article_paragraphs:
-    article_text += para.text
-
+article_text = ''.join(para.text for para in article_paragraphs)
 corpus = nltk.sent_tokenize(article_text)
 
 for i in range(len(corpus )):
@@ -41,11 +37,11 @@ wordfreq = {}
 for sentence in corpus:
     tokens = nltk.word_tokenize(sentence)
     for token in tokens:
-        if token not in wordfreq.keys():
-            wordfreq[token] = 1
-        else:
+        if token in wordfreq:
             wordfreq[token] += 1
 
+        else:
+            wordfreq[token] = 1
 import heapq
 most_freq = heapq.nlargest(200, wordfreq, key=wordfreq.get)
 
